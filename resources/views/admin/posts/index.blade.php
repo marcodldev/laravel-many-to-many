@@ -14,6 +14,7 @@
                     <th scope="col"> Titolo</th>
                     <th scope="col">Messaggio</th>
                     <th scope="col">category_id</th>
+                    <th scope="col">Tags</th>
                     <th scope="col">Azioni</th>
                 </tr>
             </thead>
@@ -35,6 +36,15 @@
                             {{ $post->category['name'] }}
                             @endif
                         </td>
+
+                        {{-- (N) a (N) --}}
+
+                        <td>
+                            @foreach ($post->tags as $singoloTag)
+                            {{ $singoloTag->name }}
+                            @endforeach
+                        </td>
+
 
                        {{-- ------------------------------------------------------------ --}}
 

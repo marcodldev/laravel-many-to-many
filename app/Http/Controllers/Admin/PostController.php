@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -32,7 +33,8 @@ class PostController extends Controller
     public function create()
     {
         $data = [
-            'categories' => Category::All()
+            'categories' => Category::All(),
+            'tags' => Tag::all()
         ];
 
         return view('admin.posts.create', $data);
@@ -56,6 +58,11 @@ class PostController extends Controller
         $newPost = new Post();
         $newPost->fill($data);
         $newPost->save();
+
+        // controllo se l'utente ha selezionato le checkbox (N) a (N)
+        if( array_key_exists('tags',$data) ){
+            $newPost->tags()->sync( $data['tags'] );
+        }
 
         return redirect()->route('admin.posts.index');
     }
@@ -83,7 +90,9 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $categories = Category::All();
 
-        return view('admin.posts.edit',compact('post','categories'));
+        $tags = Tag::all();
+
+        return view('admin.posts.edit',compact('post','categories','tags'));
     }
 
     /**
@@ -100,6 +109,14 @@ class PostController extends Controller
 
         $singoloPost->update($data);
 
+        // controlla se l'utente ha cliccato o erano già selezionate delle checkbox
+           if( array_key_exists('tags',$data) ){
+            $singoloPost->tags()->sync( $data['tags'] );
+        } else {
+            // non c'è alcun elemento selezionato
+            $singoloPost->tags()->sync([]);
+        }
+
         return redirect()->route('admin.posts.show', $singoloPost->id);
     }
 
@@ -112,6 +129,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $singoloPost = Post::findOrFail($id);
+        $singoloPost->tags()->sync([]);
         $singoloPost->delete();
 
         return redirect()->route('admin.posts.index');

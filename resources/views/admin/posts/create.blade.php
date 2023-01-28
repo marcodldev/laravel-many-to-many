@@ -13,8 +13,8 @@
 
             <div class="my-3">
                 <label class="form-label" for="">Titolo</label>
-                <input class="form-control @error('title') is-invalid @enderror"  type="text" name="title">
-                 @error('title')
+                <input class="form-control @error('title') is-invalid @enderror" type="text" name="title">
+                @error('title')
                     <div class="alert alert-danger">
                         {{ $message }}
                     </div>
@@ -24,10 +24,10 @@
 
             <div class="my-3">
                 <label class="form-label" for="">Testo</label>
-                <textarea class="form-control @error('body') is-invalid @enderror"  type="text" name="body">
+                <textarea class="form-control @error('body') is-invalid @enderror" type="text" name="body">
 
             </textarea>
-                 @error('body')
+                @error('body')
                     <div class="alert alert-danger">
                         {{ $message }}
                     </div>
@@ -46,6 +46,17 @@
                         </option>
                     @endforeach
                 </select>
+            </div>
+
+
+            <div class="my-3">
+                <label for="">Tags: </label>
+                @foreach ($tags as $tag)
+                    <label>
+                        <input class="form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                        {{$tag->name}}
+                    </label>
+                @endforeach
             </div>
 
             <button type="submit" class="btn btn-primary">Crea</button>
