@@ -10,6 +10,7 @@ class Post extends Model
         'title',
         'body',
         'category_id',   //inserito dopo le funzioni di relazione
+        'cover'  //upload immagini
     ];
 
     public function category(){

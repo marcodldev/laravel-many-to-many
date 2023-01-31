@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -56,6 +57,14 @@ class PostController extends Controller
         ]);
 
         $newPost = new Post();
+
+        // upload immagini
+
+        if( array_key_exists('image',$data)){
+            $cover_url = Storage::put('post_covers', $data['image']);
+            $data['cover'] = $cover_url;
+        }
+
         $newPost->fill($data);
         $newPost->save();
 
